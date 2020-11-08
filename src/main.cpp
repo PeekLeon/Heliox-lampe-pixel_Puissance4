@@ -390,6 +390,7 @@ void affichage_deplacement_pion_Y(uint8_t y){
 
 void deplacement_pion_X(){
   uint8_t valeur_position_pot = analogRead(POT_DEPLACEMENT) / (1024/P4_NB_COLONES);
+  valeur_position_pot = (P4_NB_COLONES-1) - valeur_position_pot;
   if(valeur_position_pot >= P4_NB_COLONES){
     valeur_position_pot = P4_NB_COLONES - 1;
   }
