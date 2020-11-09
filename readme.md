@@ -5,7 +5,8 @@ Le programme a été fait pour ne pas avoir à modifier la lampe. Nous utilisons
 
 <img src="https://raw.githubusercontent.com/PeekLeon/Heliox-lampe-pixel_Puissance4/master/HelioxPuissance4.jpg" height=300px/>
 
-Le jeu a été testé sur l'Arduino Mega mais devrait fonctionner sur un ESP32 (pas testé).
+Le jeu a été testé sur l'Arduino Mega et ESP32.  
+Sur l'ESP32 il y a encore des bugs sur la réinitialisation du jeu (en fin de partie ou quand la grille est pleine).
 
 ## Installation
 
@@ -20,9 +21,9 @@ Par défaut le code est fait pour fonctionner sur la carte Arduino Mega sur les 
 
 ### Pins
 
-- Potentiomètre du haut : `POT_DEPLACEMENT` par défaut port `A1`
-- Potentiomètre du bas : `POT_VALIDATION` par défaut port `A0`
-- Gestion du bandeau de LED : `LED_PIN` par défaut port `6`
+- Potentiomètre du haut : `POT_DEPLACEMENT` par défaut port `A1` pour l'ESP32 `A0`
+- Potentiomètre du bas : `POT_VALIDATION` par défaut port `A0` pour l'ESP32 `A6`
+- Gestion du bandeau de LED : `LED_PIN` par défaut port `6` pour l'ESP32 `16`
 
 ### Couleur
 
