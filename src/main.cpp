@@ -77,10 +77,13 @@ void loop() {
   for(uint8_t i = 0;  i < P4_NB_COLONES; i++) {
     if(grille[i][P4_NB_LIGNES -1] == 0){
       reste_place_vide = true;
-    }else{
-      delay(1000);
-      setup();
     }
+  }
+
+  // Réinitialise la grille si elle pleine
+  if(reste_place_vide == false){
+    delay(1000);
+    setup();
   }
 
   // Si il reste de la place dans la grille et qu'il n'y à pas de gagnant
