@@ -4,9 +4,9 @@
 
 // Grille
 #define P4_NB_LIGNES        6   // Hauteur de la grille (par défaut 6 cases)
-#define P4_NB_COLONES       7   // Largeur de la grille (par défaut 7 cases)
-#define P4_TAILLE_GRILLE  (P4_NB_LIGNES * P4_NB_COLONES)
-#define P4_POSITION_GRILLE  5   // La grille commence à partir de la colone n (permet de centrer la grille sur la lampe)
+#define P4_NB_COLONNES       7   // Largeur de la grille (par défaut 7 cases)
+#define P4_TAILLE_GRILLE  (P4_NB_LIGNES * P4_NB_COLONNES)
+#define P4_POSITION_GRILLE  5   // La grille commence à partir de la colonne n (permet de centrer la grille sur la lampe)
 #define P4_COULEUR_GRILLE         0x0000FF // Couleur de la grille (sans pion)
 #define P4_COULEUR_FONT_GRILLE    0xFFFFFF // Couleur autour de la grille
 #define P4_VITESSE_DEPLACEMENT_PION   150 // Vitesse pour l'annimation de déplacement du pion en millisecondes
@@ -48,8 +48,8 @@ bool gagnant;
 
 uint8_t positionX = P4_POSITION_GRILLE; // Position du pion en X
 uint8_t positionY = P4_NB_LIGNES; // Position du pion en Y
-uint8_t grille[P4_NB_COLONES][P4_NB_LIGNES];  // La grille, cases vide = 0 - joueur 1 = 1 - joueur 2 = 2
-uint8_t grilleGagnant[P4_NB_COLONES][P4_NB_LIGNES]; // Positions des pions gagnants
+uint8_t grille[P4_NB_COLONNES][P4_NB_LIGNES];  // La grille, cases vide = 0 - joueur 1 = 1 - joueur 2 = 2
+uint8_t grilleGagnant[P4_NB_COLONNES][P4_NB_LIGNES]; // Positions des pions gagnants
 bool reste_place_vide;
 bool afficherCases; // utilisé pour l'animation
 
@@ -88,7 +88,7 @@ void loop() {
   Serial.begin(115200);
   // Test si la grille est pleine
   reste_place_vide = false;
-  for(uint8_t i = 0;  i < P4_NB_COLONES; i++) {
+  for(uint8_t i = 0;  i < P4_NB_COLONNES; i++) {
     if(grille[i][P4_NB_LIGNES -1] == 0){
       reste_place_vide = true;
     }
@@ -104,7 +104,7 @@ void loop() {
   if(reste_place_vide && gagnant == false){
     affichage_deplacement_pion_X(positionX + P4_POSITION_GRILLE);
     deplacement_pion_X();
-    // Si validation et si il reste de la place dans la colone
+    // Si validation et si il reste de la place dans la colonne
     if (validation_position() && grille[positionX][P4_NB_LIGNES - 1] == 0){
       deplacement_pion_Y();
       validation_position();
@@ -211,7 +211,7 @@ bool test_cases_horizontalement(uint8_t ajout){
   uint8_t nb_pion = 1;
   grilleGagnant[positionX][positionY] = ajout;
 
-  while (testJoueurActif == joueurActif && positionX+i < P4_NB_COLONES){
+  while (testJoueurActif == joueurActif && positionX+i < P4_NB_COLONNES){
     testJoueurActif = grille[positionX+i][positionY];
     if(testJoueurActif == joueurActif){
       nb_pion = nb_pion + 1;
@@ -252,7 +252,7 @@ bool test_cases_diagonal_droite(uint8_t ajout){
   uint8_t nb_pion = 1;
   grilleGagnant[positionX][positionY] = ajout;
 
-  while (testJoueurActif == joueurActif && positionY+i < P4_NB_LIGNES && positionX+i < P4_NB_COLONES){
+  while (testJoueurActif == joueurActif && positionY+i < P4_NB_LIGNES && positionX+i < P4_NB_COLONNES){
     testJoueurActif = grille[positionX+i][positionY+i];
     if(testJoueurActif == joueurActif){
       nb_pion = nb_pion + 1;
@@ -305,7 +305,7 @@ bool test_cases_diagonal_gauche(uint8_t ajout){
   i = 1;
   testJoueurActif = joueurActif;
 
-  while (testJoueurActif == joueurActif && positionY-i >= 0 && positionX+i < P4_NB_COLONES){
+  while (testJoueurActif == joueurActif && positionY-i >= 0 && positionX+i < P4_NB_COLONNES){
     testJoueurActif = grille[positionX+i][positionY-i];
     if(testJoueurActif == joueurActif){
       nb_pion = nb_pion + 1;
@@ -342,7 +342,7 @@ void animation_gagnant(){
     couleurGagnant = JOUEUR_2_COULEUR;
   }
 
-  for (uint8_t x = 0; x < P4_NB_COLONES; x++) {
+  for (uint8_t x = 0; x < P4_NB_COLONNES; x++) {
     for (uint8_t y = 0; y < P4_NB_LIGNES; y++){
       
       if(grilleGagnant[x][y] == 1){
@@ -406,10 +406,10 @@ void affichage_deplacement_pion_Y(uint8_t y){
 }
 
 void deplacement_pion_X(){
-  uint8_t valeur_position_pot = analogRead(POT_DEPLACEMENT) / (POT_NB_PAS/P4_NB_COLONES);
-  valeur_position_pot = (P4_NB_COLONES-1) - valeur_position_pot;
-  if(valeur_position_pot >= P4_NB_COLONES){
-    valeur_position_pot = P4_NB_COLONES - 1;
+  uint8_t valeur_position_pot = analogRead(POT_DEPLACEMENT) / (POT_NB_PAS/P4_NB_COLONNES);
+  valeur_position_pot = (P4_NB_COLONNES-1) - valeur_position_pot;
+  if(valeur_position_pot >= P4_NB_COLONNES){
+    valeur_position_pot = P4_NB_COLONNES - 1;
   }
   
   if(positionX != valeur_position_pot){
@@ -420,7 +420,7 @@ void deplacement_pion_X(){
 
 void affichage_deplacement_pion_X(uint8_t x){
   uint8_t casesGrille = 0;
-  for(uint8_t i = 0;  i < P4_NB_COLONES; i++) {
+  for(uint8_t i = 0;  i < P4_NB_COLONNES; i++) {
     casesGrille = position_XY(P4_POSITION_GRILLE + i, LAMP_HAUTEUR - 1);
     leds[casesGrille] = P4_COULEUR_FONT_GRILLE;
   }
@@ -444,7 +444,7 @@ void initialisation_grille(){
   // Grille
   uint8_t casesGrille = 0;
   for (uint8_t i = 0; i < P4_NB_LIGNES; i++) {
-    for(uint8_t j = 0;  j < P4_NB_COLONES; j++) {
+    for(uint8_t j = 0;  j < P4_NB_COLONNES; j++) {
       casesGrille = position_XY(P4_POSITION_GRILLE + j, P4_NB_LIGNES - (i+1));
       leds[casesGrille] = P4_COULEUR_GRILLE;
       grille[j][i] = 0;
