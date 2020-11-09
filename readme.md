@@ -33,7 +33,7 @@ Par défaut le code est fait pour fonctionner sur la carte Arduino Mega sur les 
 
 ### Grille
 
-- Largeur : `P4_NB_COLONES` par défaut `7`
+- Largeur : `P4_NB_COLONNES` par défaut `7`
 - Hauteur : `P4_NB_LIGNES` par défaut `6`
 - Position du début de la grille : `P4_POSITION_GRILLE` par défaut `5`
 
