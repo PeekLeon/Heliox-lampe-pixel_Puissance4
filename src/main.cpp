@@ -12,7 +12,12 @@
 #define P4_VITESSE_DEPLACEMENT_PION   150 // Vitesse pour l'annimation de déplacement du pion en millisecondes
 
 // Lampe
-#define LED_PIN             6 // Pour un ESP32 ne pas prendre la PIN 6 (prendre la 26 par exemple)   
+#ifdef ARDUINO_ARCH_ESP32
+  #define LED_PIN            16   
+#else
+  #define LED_PIN             6  
+#endif
+
 #define COLOR_ORDER       GRB
 #define CHIPSET        WS2811
 #define BRIGHTNESS        128
@@ -22,8 +27,16 @@
 CRGB leds[LAMP_TAILLE];
 
 // Boutons
-#define POT_DEPLACEMENT     1   // Potentiomètre du haut
-#define POT_VALIDATION      0   // Potentiomètre du bas
+#ifdef ARDUINO_ARCH_ESP32
+  #define POT_DEPLACEMENT    36   // Potentiomètre du haut
+  #define POT_VALIDATION     34   // Potentiomètre du bas
+  #define POT_NB_PAS       4096   // Port analogique sur 12bits - 4096 octets
+#else
+  #define POT_DEPLACEMENT     1   // Potentiomètre du haut
+  #define POT_VALIDATION      0   // Potentiomètre du bas
+  #define POT_NB_PAS       1024   // Port analogique sur 10bits - 1024 octets
+#endif
+
 uint8_t pot_valeur_derniere_validation;
 uint8_t pot_valeur_derniere_position;
 
@@ -72,6 +85,7 @@ void setup() {
 }
 
 void loop() {
+  Serial.begin(115200);
   // Test si la grille est pleine
   reste_place_vide = false;
   for(uint8_t i = 0;  i < P4_NB_COLONES; i++) {
@@ -79,7 +93,7 @@ void loop() {
       reste_place_vide = true;
     }
   }
-
+  
   // Réinitialise la grille si elle pleine
   if(reste_place_vide == false){
     delay(1000);
@@ -345,7 +359,7 @@ void animation_gagnant(){
 }
 
 bool validation_position(){
-  uint8_t valeur_validation_pot = analogRead(POT_VALIDATION) / 32; // Divisé par 64 pour avoir 16 crans sur le potentionmétre (1024/64 = 16)
+  uint8_t valeur_validation_pot = analogRead(POT_VALIDATION) / (32*(POT_NB_PAS/1024)); // Divisé par 32 pour avoir 32 crans sur le potentionmétre (1024/32 = 32)
   bool validation = false;
 
   // Si valeur précédente est différente de la valeur actuel 
@@ -392,7 +406,7 @@ void affichage_deplacement_pion_Y(uint8_t y){
 }
 
 void deplacement_pion_X(){
-  uint8_t valeur_position_pot = analogRead(POT_DEPLACEMENT) / (1024/P4_NB_COLONES);
+  uint8_t valeur_position_pot = analogRead(POT_DEPLACEMENT) / (POT_NB_PAS/P4_NB_COLONES);
   valeur_position_pot = (P4_NB_COLONES-1) - valeur_position_pot;
   if(valeur_position_pot >= P4_NB_COLONES){
     valeur_position_pot = P4_NB_COLONES - 1;
